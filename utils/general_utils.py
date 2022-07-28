@@ -1,5 +1,22 @@
 # import math
 from config import *
+from torchvision import datasets, transforms
+
+def load_mnist_target():
+    transform = transforms.Compose(
+        [transforms.ToTensor(), ])
+
+    trainset = datasets.MNIST('data/mnist_train', train=True,
+                              download=True, transform=transform)
+
+    trainloader = torch.utils.data.DataLoader(
+        trainset, batch_size=64, shuffle=False)
+
+    inputs, labels = next(iter(trainloader))
+    inputs = circular_pad(inputs, 32/28)
+    inputs = F.interpolate(inputs, scale_factor=2)
+    target = inputs[:1, :, :, :].to(device)
+    return target
 
 
 def normalize(x):
