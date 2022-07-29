@@ -32,7 +32,8 @@ class DOE(nn.Module):
         return doe_sample
     
     def forward(self):
-        pass
+        phase = self.doe_levels_to_phase(self.get_doe_sample())
+        return phase
 
 
 def __main__():

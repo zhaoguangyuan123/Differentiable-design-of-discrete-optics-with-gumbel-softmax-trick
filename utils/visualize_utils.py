@@ -1,7 +1,6 @@
 
 """_utils functions for visualization purposes_
 """
-
 import numpy
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
@@ -10,7 +9,6 @@ import torch
 import numpy as np
 from matplotlib import animation
 import matplotlib.colors as colors
-
 
 
 def make_gif_for_multiple_plots(itrs):

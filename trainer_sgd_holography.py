@@ -1,11 +1,9 @@
 
-
 from config import *
 from utils.propagator import FresnelProp
 from utils.visualize_utils import plot_loss, show, discrete_matshow, plot_bar3d, make_gif_for_multiple_plots
 from utils.general_utils import normalize
 from discrete_doe import DOE
-import skvideo.io
 
 
 class TestOptics(nn.Module):
@@ -19,8 +17,11 @@ class TestOptics(nn.Module):
         self.m = nn.Upsample(scale_factor=slm_size /
                              num_partition, mode='nearest')
 
-    def forward(self):
-        phase = self.doe.doe_levels_to_phase(self.doe.get_doe_sample())
+    def forward(self, test=False):
+        if test:
+            phase = self.doe.doe_levels_to_phase(self.doe.logits_to_doe_profile())[None,None,:,:]
+        else:
+            phase = self.doe()
         phase = self.m(phase)
         x = torch.exp(1j*phase)
         x = self.propagate_fresnel(x)
@@ -36,8 +37,7 @@ class SGDHoloTrainer(object):
             self.testoptics.parameters(), lr=lr)
         self.photometric_loss_fn = nn.MSELoss()
         self.target = target
-        self.writer = skvideo.io.FFmpegWriter("outputvideo.mp4")
-        
+    
     def train(self, itrs):
         losses = []
         itr_list = []
@@ -55,6 +55,12 @@ class SGDHoloTrainer(object):
             itr_list.append(itr)
                     
             if itr % 20 == 0 or itr == (itrs-1):
+                with torch.no_grad():
+                    out_field = self.testoptics(test=True)
+                    out_amp = normalize(torch.abs(out_field)**2)
+                show(out_amp[0, 0].detach().cpu().numpy(),
+                     'test img at itr {}'.format(itr), cmap='gray')
+                
                 itr_to_save_plots.append(itr)
                 plot_loss(itr_list, losses)
                 show(out_amp[0, 0].detach().cpu().numpy(),
