@@ -5,11 +5,12 @@ Very simple Pytorch implementation of gumbel-softmax trick for differentiable de
 ## How to start:
 **Just run main.py**
 
-![Alt Text](https://media.giphy.com/media/VbnUQpnihPSIgIXuZv/giphy.gif)
+![Alt Text]([https://media.giphy.com/media/VbnUQpnihPSIgIXuZv/giphy-downsized.gif])
 
 ## Example:
 Optimize a size of $32\times32$ multilevel ($4$) diffraction optical lements (DOE) to render the img on the right.
 ![alt-text](plots/optimization_evolution.gif)
 
-Final doe profile in 3D is: 
+**Final doe profile in 3D is:** 
+
 ![alt-text](plots/final_doe_profile.png)
