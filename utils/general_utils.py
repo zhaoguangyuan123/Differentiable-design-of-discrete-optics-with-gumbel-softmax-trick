@@ -55,7 +55,6 @@ def circular_pad(u, pad_scale):
     u_padded = F.pad(u, p2d, mode="constant", value=0)
     return u_padded
 
-
 class InterpolateComplex2d(nn.Module):
     def __init__(self, input_dx, input_field_shape, output_dx, output_field_shape, mode='bicubic') -> None:
         super().__init__()

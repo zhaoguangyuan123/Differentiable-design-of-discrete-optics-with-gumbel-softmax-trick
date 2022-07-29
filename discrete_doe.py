@@ -1,11 +1,11 @@
 
 from config import *
 import math
+from utils.visualize_utils import show
 
 
 class DOE(nn.Module):
     """DOE Module"""
-
     def __init__(self, doe_size, doe_level) -> None:
         super(DOE, self).__init__()
         self.logits = nn.parameter.Parameter(
@@ -30,8 +30,14 @@ class DOE(nn.Module):
                       self.level_logits[None, None, :]).sum(dim=-1)
         doe_sample = doe_sample[None, None, :, :]
         return doe_sample
+    
+    def forward(self):
+        pass
 
 
 def __main__():
     doe = DOE(doe_size=20, doe_level=16)
-    doe.get_doe_sample()
+    # doe.get_doe_sample()
+    doe_res = doe.logits_to_doe_profile()
+    print('doe res',doe_res.shape)
+    # show()
